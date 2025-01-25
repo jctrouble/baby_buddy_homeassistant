@@ -144,8 +144,8 @@ def update_items(
             if child[ATTR_ID] not in tracked:
                 entities = [
                     BabyBuddyChildTimerSwitch(coordinator, child),
-                    BabyBuddyChildTimerSwitch(coordinator, child, "feeding", "Feeding Timer")
-                    BabyBuddyChildTimerSwitch(coordinator, child, "sleep", "Sleep Timer")
+                    BabyBuddyChildTimerSwitch(coordinator, child, "feeding", "Feeding Timer"),
+                    BabyBuddyChildTimerSwitch(coordinator, child, "sleep", "Sleep Timer"),
                     BabyBuddyChildTimerSwitch(coordinator, child, "tummy", "Tummy Timer")
                 ]
                 tracked[child[ATTR_ID]] = entities
