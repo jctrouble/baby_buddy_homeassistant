@@ -124,6 +124,8 @@ class BabyBuddyEntityDescription(SensorEntityDescription, SwitchEntityDescriptio
     """Describe Baby Buddy sensor entity."""
 
     state_key: Callable[[dict], int] | str = ""
+    name_filter: str | None = None
+    data_key: str | None = None
 
 
 SENSOR_TYPES: tuple[BabyBuddyEntityDescription, ...] = (
@@ -185,11 +187,35 @@ SENSOR_TYPES: tuple[BabyBuddyEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         state_key=SensorDeviceClass.TEMPERATURE,
     ),
-    BabyBuddyEntityDescription(
+    BabyBuddyEntityDescriptionBabyBuddyEntityDescription(
         device_class=SensorDeviceClass.TIMESTAMP,
         icon=ATTR_ICON_TIMER_SAND,
         key=ATTR_TIMERS,
         state_key=ATTR_START,
+    ),
+    BabyBuddyEntityDescriptionBabyBuddyEntityDescription(
+        device_class=SensorDeviceClass.TIMESTAMP,
+        icon=ATTR_ICON_TIMER_SAND,
+        key=ATTR_TIMERS,
+        state_key=ATTR_START,
+        name_filter="Sleep Timer",
+        data_key="sleep-timer"
+    ),
+    BabyBuddyEntityDescriptionBabyBuddyEntityDescription(
+        device_class=SensorDeviceClass.TIMESTAMP,
+        icon=ATTR_ICON_TIMER_SAND,
+        key=ATTR_TIMERS,
+        state_key=ATTR_START,
+        name_filter="Feeding Timer",
+        data_key="feeding-timer"
+    ),
+    BabyBuddyEntityDescriptionBabyBuddyEntityDescription(
+        device_class=SensorDeviceClass.TIMESTAMP,
+        icon=ATTR_ICON_TIMER_SAND,
+        key=ATTR_TIMERS,
+        state_key=ATTR_START,
+        name_filter="Tummy Timer",
+        data_key="tummy-timer"
     ),
     BabyBuddyEntityDescription(
         icon=ATTR_ICON_BABY,

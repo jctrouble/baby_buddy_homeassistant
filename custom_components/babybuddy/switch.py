@@ -142,8 +142,14 @@ def update_items(
     if coordinator.data is not None:
         for child in coordinator.data[0]:
             if child[ATTR_ID] not in tracked:
-                tracked[child[ATTR_ID]] = BabyBuddyChildTimerSwitch(coordinator, child)
-                new_entities.append(tracked[child[ATTR_ID]])
+                entities = [
+                    BabyBuddyChildTimerSwitch(coordinator, child),
+                    BabyBuddyChildTimerSwitch(coordinator, child, "feeding", "Feeding Timer")
+                    BabyBuddyChildTimerSwitch(coordinator, child, "sleep", "Sleep Timer")
+                    BabyBuddyChildTimerSwitch(coordinator, child, "tummy", "Tummy Timer")
+                ]
+                tracked[child[ATTR_ID]] = entities
+                new_entities.extend(entities)
         if new_entities:
             async_add_entities(new_entities)
 
@@ -157,14 +163,23 @@ class BabyBuddyChildTimerSwitch(CoordinatorEntity, SwitchEntity):
         self,
         coordinator: BabyBuddyCoordinator,
         child: dict,
+        timer_type: str | None,
+        name_override: str | None
     ) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator)
+
+        self._data_key = f"{timer_type}-timer" if timer_type else ATTR_TIMERS
+        self._name_override = name_override
+
+        id_suffix = f"-{timer_type}" if timer_type else ""
+        name_prefix = f"{timer_type} "
+
         self.child = child
         self._attr_name = (
-            f"{self.child[ATTR_FIRST_NAME]} {self.child[ATTR_LAST_NAME]} {ATTR_TIMER}"
+            f"{self.child[ATTR_FIRST_NAME]} {self.child[ATTR_LAST_NAME]} {name_prefix}{ATTR_TIMER}"
         )
-        self._attr_unique_id = f"{self.coordinator.config_entry.data[CONF_API_KEY]}-{child[ATTR_ID]}-{ATTR_TIMER}"
+        self._attr_unique_id = f"{self.coordinator.config_entry.data[CONF_API_KEY]}-{child[ATTR_ID]}-{ATTR_TIMER}{id_suffix}"
         self._attr_icon = ATTR_ICON_TIMER_SAND
         self._attr_device_info = {
             "identifiers": {(DOMAIN, child[ATTR_ID])},
@@ -175,7 +190,7 @@ class BabyBuddyChildTimerSwitch(CoordinatorEntity, SwitchEntity):
     def is_on(self) -> bool:
         """Return entity state."""
         if self.child[ATTR_ID] in self.coordinator.data[1]:
-            timer_data = self.coordinator.data[1][self.child[ATTR_ID]][ATTR_TIMERS]
+            timer_data = self.coordinator.data[1][self.child[ATTR_ID]][self._data_key]
             # In Babybuddy 2.0 'active' is not in the JSON response, so return
             # True if any timers are returned, as only active timers are
             # returned.
@@ -187,7 +202,7 @@ class BabyBuddyChildTimerSwitch(CoordinatorEntity, SwitchEntity):
         """Return entity specific state attributes for babybuddy."""
         attrs: dict[str, Any] = {}
         if self.is_on:
-            attrs = self.coordinator.data[1][self.child[ATTR_ID]].get(ATTR_TIMERS)
+            attrs = self.coordinator.data[1][self.child[ATTR_ID]].get(self._data_key)
         return attrs
 
     async def async_turn_on(self, **kwargs: Any) -> None:
@@ -212,6 +227,9 @@ class BabyBuddyChildTimerSwitch(CoordinatorEntity, SwitchEntity):
             return
         if name:
             data[ATTR_NAME] = name
+
+        if self._name_override:
+            data[ATTR_NAME] = self._name_override
 
         await self.coordinator.client.async_post(ATTR_TIMERS, data)
         await self.coordinator.async_request_refresh()

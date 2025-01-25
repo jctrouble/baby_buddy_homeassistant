@@ -208,10 +208,13 @@ class BabyBuddyCoordinator(DataUpdateCoordinator):
         for child in children_list[ATTR_RESULTS]:
             child_data.setdefault(child[ATTR_ID], {})
             for endpoint in SENSOR_TYPES:
+                data_key = endpoint.data_key if endpoint.data_key else endpoint.key
+                name_filter = f"&{endpoint.name_filter}" if endpoint.name_filter else ""
+
                 endpoint_data: dict = {}
                 try:
                     endpoint_data = await self.client.async_get(
-                        endpoint.key, f"?child={child[ATTR_ID]}&limit=1"
+                        endpoint.key, f"?child={child[ATTR_ID]}{name_filter}&limit=1"
                     )
                 except ClientResponseError as error:
                     _LOGGER.debug(
@@ -222,7 +225,7 @@ class BabyBuddyCoordinator(DataUpdateCoordinator):
                     _LOGGER.error(error)
                     continue
                 data: list[dict[str, str]] = endpoint_data[ATTR_RESULTS]
-                child_data[child[ATTR_ID]][endpoint.key] = data[0] if data else {}
+                child_data[child[ATTR_ID]][data_key] = data[0] if data else {}
 
         return (children_list[ATTR_RESULTS], child_data)
 
