@@ -163,8 +163,8 @@ class BabyBuddyChildTimerSwitch(CoordinatorEntity, SwitchEntity):
         self,
         coordinator: BabyBuddyCoordinator,
         child: dict,
-        timer_type: str | None,
-        name_override: str | None
+        timer_type: str | None = None,
+        name_override: str | None = None
     ) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator)
