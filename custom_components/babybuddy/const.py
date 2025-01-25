@@ -187,13 +187,13 @@ SENSOR_TYPES: tuple[BabyBuddyEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         state_key=SensorDeviceClass.TEMPERATURE,
     ),
-    BabyBuddyEntityDescriptionBabyBuddyEntityDescription(
+    BabyBuddyEntityDescription(
         device_class=SensorDeviceClass.TIMESTAMP,
         icon=ATTR_ICON_TIMER_SAND,
         key=ATTR_TIMERS,
         state_key=ATTR_START,
     ),
-    BabyBuddyEntityDescriptionBabyBuddyEntityDescription(
+    BabyBuddyEntityDescription(
         device_class=SensorDeviceClass.TIMESTAMP,
         icon=ATTR_ICON_TIMER_SAND,
         key=ATTR_TIMERS,
@@ -201,7 +201,7 @@ SENSOR_TYPES: tuple[BabyBuddyEntityDescription, ...] = (
         name_filter="Sleep Timer",
         data_key="sleep-timer"
     ),
-    BabyBuddyEntityDescriptionBabyBuddyEntityDescription(
+    BabyBuddyEntityDescription(
         device_class=SensorDeviceClass.TIMESTAMP,
         icon=ATTR_ICON_TIMER_SAND,
         key=ATTR_TIMERS,
@@ -209,7 +209,7 @@ SENSOR_TYPES: tuple[BabyBuddyEntityDescription, ...] = (
         name_filter="Feeding Timer",
         data_key="feeding-timer"
     ),
-    BabyBuddyEntityDescriptionBabyBuddyEntityDescription(
+    BabyBuddyEntityDescription(
         device_class=SensorDeviceClass.TIMESTAMP,
         icon=ATTR_ICON_TIMER_SAND,
         key=ATTR_TIMERS,
