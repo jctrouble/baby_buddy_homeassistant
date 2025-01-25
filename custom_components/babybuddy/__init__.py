@@ -26,6 +26,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 import homeassistant.helpers.device_registry as dr
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 import homeassistant.util.dt as dt_util
+import urllib.parse
 
 from .client import BabyBuddyClient
 from .const import (
@@ -209,7 +210,7 @@ class BabyBuddyCoordinator(DataUpdateCoordinator):
             child_data.setdefault(child[ATTR_ID], {})
             for endpoint in SENSOR_TYPES:
                 data_key = endpoint.data_key if endpoint.data_key else endpoint.key
-                name_filter = f"&{endpoint.name_filter}" if endpoint.name_filter else ""
+                name_filter = f"&name={urllib.parse.quote_plus(endpoint.name_filter)}" if endpoint.name_filter else ""
 
                 endpoint_data: dict = {}
                 try:

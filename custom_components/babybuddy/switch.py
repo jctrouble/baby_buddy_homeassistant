@@ -173,7 +173,7 @@ class BabyBuddyChildTimerSwitch(CoordinatorEntity, SwitchEntity):
         self._name_override = name_override
 
         id_suffix = f"-{timer_type}" if timer_type else ""
-        name_prefix = f"{timer_type} "
+        name_prefix = f"{timer_type} " if timer_type else ""
 
         self.child = child
         self._attr_name = (
